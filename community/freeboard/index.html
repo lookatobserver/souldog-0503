@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>자유게시판 — 한국반려견복지협회</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;900&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="/style2.css" rel="stylesheet">
+  <style>
+    .board-hero {
+      background: var(--green);
+      color: #fff;
+      padding: 40px 40px 36px;
+      border-bottom: var(--border);
+    }
+    .board-hero .section-mono { color: var(--yellow); margin-bottom: 8px; }
+    .board-hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+    }
+    .board-wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* Auth bar */
+    .auth-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #000;
+    }
+    .auth-user {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+    }
+
+    /* Toolbar */
+    .board-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0;
+    }
+    .board-title-label {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    /* Post table */
+    .post-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-top: var(--border);
+      border-left: var(--border);
+      margin-top: 12px;
+    }
+    .post-table th {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 12px 16px;
+      background: var(--black);
+      color: var(--yellow);
+      border-right: var(--border);
+      border-bottom: var(--border);
+    }
+    .post-table td {
+      padding: 14px 16px;
+      font-size: .88rem;
+      border-right: var(--border);
+      border-bottom: 1px solid rgba(0,0,0,.12);
+      vertical-align: middle;
+    }
+    .post-row { cursor: crosshair; transition: background .12s; }
+    .post-row:hover { background: var(--yellow); }
+    .post-row:last-child td { border-bottom: var(--border); }
+    .post-num { width: 56px; text-align: center; font-family: var(--font-mono); font-size: .76rem; color: #888; }
+    .post-title { font-weight: 600; }
+    .post-author { width: 110px; font-family: var(--font-mono); font-size: .78rem; color: #555; }
+    .post-views { width: 70px; text-align: center; font-family: var(--font-mono); font-size: .76rem; color: #888; }
+    .post-date { width: 100px; font-family: var(--font-mono); font-size: .76rem; color: #888; white-space: nowrap; }
+    .no-posts { text-align: center; padding: 48px 16px !important; color: #888; font-size: .9rem; }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 24px;
+    }
+    .page-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--black);
+      background: #fff;
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: crosshair;
+      transition: background .12s;
+    }
+    .page-btn:hover, .page-btn.active { background: var(--yellow); }
+
+    /* Detail view */
+    .detail-header {
+      border: var(--border);
+      padding: 24px 28px;
+      margin-bottom: 0;
+      background: #fff;
+    }
+    .detail-header h2 {
+      font-family: var(--font-head);
+      font-size: 1.6rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .detail-meta {
+      display: flex;
+      gap: 20px;
+      font-family: var(--font-mono);
+      font-size: .76rem;
+      color: #666;
+      letter-spacing: .04em;
+    }
+    .detail-content {
+      border: var(--border);
+      border-top: none;
+      padding: 32px 28px;
+      min-height: 200px;
+      font-size: .95rem;
+      line-height: 1.85;
+      white-space: pre-wrap;
+      background: #fff;
+    }
+    .detail-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+    }
+    .detail-actions { display: flex; gap: 8px; }
+
+    /* Write view */
+    .write-form {
+      border: var(--border);
+      background: #fff;
+    }
+    .write-field {
+      border-bottom: var(--border);
+    }
+    .write-field:last-child { border-bottom: none; }
+    .write-field label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: var(--black);
+      color: var(--yellow);
+      padding: 8px 16px;
+    }
+    .write-field input,
+    .write-field textarea {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      font-family: var(--font-body);
+      font-size: .95rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      resize: none;
+    }
+    .write-field textarea { min-height: 280px; }
+    .write-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    /* Auth modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--cream);
+      border: var(--border);
+      width: 100%;
+      max-width: 420px;
+      margin: 16px;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: var(--border);
+      background: var(--black);
+    }
+    .modal-header h3 {
+      font-family: var(--font-mono);
+      font-size: .84rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: crosshair;
+      line-height: 1;
+    }
+    .modal-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .modal-tab {
+      flex: 1;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: none;
+      border: none;
+      border-right: var(--border);
+      cursor: crosshair;
+      transition: background .12s;
+    }
+    .modal-tab:last-child { border-right: none; }
+    .modal-tab.active { background: var(--yellow); }
+    .modal-body { padding: 24px 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid var(--black);
+      font-family: var(--font-body);
+      font-size: .9rem;
+      background: #fff;
+      outline: none;
+    }
+    .form-group input:focus { border-color: var(--green); }
+    .auth-error {
+      font-size: .82rem;
+      color: #e00;
+      margin-bottom: 12px;
+      min-height: 20px;
+    }
+    .nickname-group { display: none; }
+    .nickname-group.show { display: block; }
+    @media (max-width: 600px) {
+      .board-wrap { padding: 24px 16px 60px; }
+      .post-author, .post-views { display: none; }
+      .detail-header h2 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span>● 긴급 구조 요청</span><span>— 입양을 기다리는 생명들</span>
+      <span>— 함께하면 바꿀 수 있습니다</span><span>— SAVE · RESCUE · ADOPT</span>
+      <span>● 위기동물 구조 진행 중</span><span>— 임시보호 자원봉사자 모집</span>
+      <span>— 반려견 복지정책 연구</span><span>— JOIN THE MISSION</span>
+      <span>● 긴급 구조 요청</span><span>— 입양을 기다리는 생명들</span>
+      <span>— 함께하면 바꿀 수 있습니다</span><span>— SAVE · RESCUE · ADOPT</span>
+      <span>● 위기동물 구조 진행 중</span><span>— 임시보호 자원봉사자 모집</span>
+      <span>— 반려견 복지정책 연구</span><span>— JOIN THE MISSION</span>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header2" id="siteHeader">
+    <div class="hd-grid">
+      <a href="/" class="logo2">
+        <img src="/img/logo.png" alt="반려견복지협회 로고" class="logo2-img">
+        <span class="logo2-title">사단법인<br>한국반려견복지협회</span>
+      </a>
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-list2">
+          <li class="nav-item2 has-sub"><a href="/about">협회소개</a>
+            <ul class="sub-menu2">
+              <li><a href="/about/greeting">인사말</a></li>
+              <li><a href="/about/vision">설립목적 및 비전</a></li>
+              <li><a href="/about/history">연혁</a></li>
+              <li><a href="/about/organization">조직도 및 임원진</a></li>
+              <li><a href="/about/location">찾아오시는 길</a></li>
+            </ul>
+          </li>
+          <li class="nav-item2 has-sub"><a href="/business">주요사업</a>
+            <ul class="sub-menu2">
+              <li><a href="/business/rescue">위기동물 구조 및 치료</a></li>
+              <li><a href="/business/adoption">유기견 입양지원</a></li>
+              <li><a href="/business/campaign">올바른 반려문화 캠페인</a></li>
+              <li><a href="/business/policy">반려견 복지정책 연구</a></li>
+            </ul>
+          </li>
+          <li class="nav-item2 has-sub"><a href="/adopt">입양·임보</a>
+            <ul class="sub-menu2">
+              <li><a href="/adopt/list">입양 대기조회</a></li>
+              <li><a href="/adopt/guide">입양 안내 및 신청</a></li>
+              <li><a href="/adopt/foster">임시보호 안내 및 신청</a></li>
+              <li><a href="/adopt/reviews">입양 후기</a></li>
+            </ul>
+          </li>
+          <li class="nav-item2 has-sub"><a href="/support">참여·후원</a>
+            <ul class="sub-menu2">
+              <li><a href="/support/donate">정기/일시 후원하기</a></li>
+              <li><a href="/support/corporate">기업 및 물품 후원</a></li>
+              <li><a href="/support/volunteer">자원봉사 신청</a></li>
+              <li><a href="/support/transparency">재정 투명성(사용내역)</a></li>
+            </ul>
+          </li>
+          <li class="nav-item2 has-sub"><a href="/news">소식·자료</a>
+            <ul class="sub-menu2">
+              <li><a href="/news/notice">공지사항</a></li>
+              <li><a href="/news/association">협회소식</a></li>
+              <li><a href="/news/press">언론보도</a></li>
+              <li><a href="/news/information">반려견 양육 정보</a></li>
+              <li><a href="/news/reports">발간자료 및 리포트</a></li>
+            </ul>
+          </li>
+          <li class="nav-item2 has-sub"><a href="/community">커뮤니티</a>
+            <ul class="sub-menu2">
+              <li><a href="/community/freeboard">자유게시판</a></li>
+              <li><a href="/community/photoboard">사진게시판</a></li>
+              <li><a href="/community/faq">FAQ (자주 묻는 질문)</a></li>
+              <li><a href="/community/qna">Q&amp;A 및 상담</a></li>
+            </ul>
+          </li>
+          <li class="nav-item2"><a href="/support/donate" class="nav-cta2">후원하기</a></li>
+        </ul>
+      </nav>
+      <div class="hd-right">
+        <span class="sys-status"><span class="status-dot"></span>SYSTEM ACTIVE</span>
+        <button class="hamburger" id="hamburger" aria-label="메뉴 열기">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- BOARD HERO -->
+  <div class="board-hero">
+    <div class="section-mono">COMMUNITY / FREE BOARD</div>
+    <h1>자유게시판</h1>
+  </div>
+
+  <!-- BOARD MAIN -->
+  <main class="board-wrap">
+
+    <!-- Auth bar -->
+    <div class="auth-bar" id="auth-bar">
+      <button class="btn-brutal btn-sm" id="open-auth-btn">로그인 / 회원가입</button>
+    </div>
+
+    <!-- LIST VIEW -->
+    <section id="view-list">
+      <div class="board-toolbar">
+        <span class="board-title-label">전체 글</span>
+        <button class="btn-brutal btn-sm" id="write-btn">글쓰기</button>
+      </div>
+      <table class="post-table">
+        <thead>
+          <tr>
+            <th class="post-num">번호</th>
+            <th>제목</th>
+            <th class="post-author">작성자</th>
+            <th class="post-views">조회</th>
+            <th class="post-date">날짜</th>
+          </tr>
+        </thead>
+        <tbody id="posts-tbody">
+          <tr><td colspan="5" class="no-posts">로딩 중...</td></tr>
+        </tbody>
+      </table>
+      <div class="pagination" id="pagination"></div>
+    </section>
+
+    <!-- DETAIL VIEW -->
+    <section id="view-detail" hidden>
+      <div class="detail-header">
+        <h2 id="detail-title"></h2>
+        <div class="detail-meta">
+          <span id="detail-author"></span>
+          <span id="detail-date"></span>
+          <span id="detail-views"></span>
+        </div>
+      </div>
+      <div class="detail-content" id="detail-content"></div>
+      <div class="detail-footer">
+        <button class="btn-brutal btn-sm" onclick="showView('list')">← 목록</button>
+        <div class="detail-actions" id="detail-actions"></div>
+      </div>
+    </section>
+
+    <!-- WRITE VIEW -->
+    <section id="view-write" hidden>
+      <div class="write-form">
+        <div class="write-field">
+          <label for="write-title">제목</label>
+          <input type="text" id="write-title" placeholder="제목을 입력하세요" maxlength="100">
+        </div>
+        <div class="write-field">
+          <label for="write-content">내용</label>
+          <textarea id="write-content" placeholder="내용을 입력하세요"></textarea>
+        </div>
+      </div>
+      <div class="write-footer">
+        <button class="btn-brutal btn-sm btn-outline2" style="background:transparent;color:#000;border-color:#000" onclick="showView('list')">취소</button>
+        <button class="btn-brutal btn-sm" id="submit-btn">등록</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- AUTH MODAL -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>회원 인증</h3>
+        <button class="modal-close" id="modal-close-btn">×</button>
+      </div>
+      <div class="modal-tabs">
+        <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">로그인</button>
+        <button class="modal-tab" id="tab-signup" onclick="switchTab('signup')">회원가입</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group nickname-group" id="nickname-group">
+          <label>닉네임</label>
+          <input type="text" id="auth-nickname" placeholder="닉네임 (2~10자)" maxlength="10">
+        </div>
+        <div class="form-group">
+          <label>이메일</label>
+          <input type="email" id="auth-email" placeholder="example@email.com">
+        </div>
+        <div class="form-group">
+          <label>비밀번호</label>
+          <input type="password" id="auth-password" placeholder="6자 이상">
+        </div>
+        <div class="auth-error" id="auth-error"></div>
+        <button class="btn-brutal" style="width:100%" id="auth-submit-btn">로그인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer2">
+    <div class="footer2-top">
+      <div class="footer2-brand">
+        <img src="/img/logo.png" alt="로고" class="footer2-logo-img">
+        <div class="footer2-name">사단법인<br>한국반려견복지협회</div>
+      </div>
+      <div class="footer2-cols">
+        <div class="footer2-col">
+          <h5>협회소개</h5>
+          <ul>
+            <li><a href="/about/greeting">인사말</a></li>
+            <li><a href="/about/vision">설립목적 및 비전</a></li>
+            <li><a href="/about/organization">조직도 및 임원진</a></li>
+          </ul>
+        </div>
+        <div class="footer2-col">
+          <h5>주요사업</h5>
+          <ul>
+            <li><a href="/business/rescue">위기동물 구조</a></li>
+            <li><a href="/business/adoption">유기견 입양지원</a></li>
+            <li><a href="/business/campaign">반려문화 캠페인</a></li>
+          </ul>
+        </div>
+        <div class="footer2-col">
+          <h5>입양·임보</h5>
+          <ul>
+            <li><a href="/adopt/list">입양 대기조회</a></li>
+            <li><a href="/adopt/guide">입양 안내</a></li>
+            <li><a href="/adopt/foster">임시보호 안내</a></li>
+          </ul>
+        </div>
+        <div class="footer2-col">
+          <h5>커뮤니티</h5>
+          <ul>
+            <li><a href="/community/freeboard">자유게시판</a></li>
+            <li><a href="/community/photoboard">사진게시판</a></li>
+            <li><a href="/community/faq">FAQ</a></li>
+            <li><a href="/community/qna">Q&amp;A 및 상담</a></li>
+          </ul>
+        </div>
+        <div class="footer2-col">
+          <h5>참여·후원</h5>
+          <ul>
+            <li><a href="/support/donate">후원하기</a></li>
+            <li><a href="/support/volunteer">자원봉사</a></li>
+            <li><a href="/support/transparency">재정 투명성</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer2-bottom">
+      <span>© 2025 사단법인 한국반려견복지협회. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- Hamburger script -->
+  <script>
+    document.getElementById('hamburger').addEventListener('click', function() {
+      this.classList.toggle('active');
+      document.getElementById('mainNav').classList.toggle('open');
+    });
+  </script>
+
+  <!-- Firebase Board Script -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import {
+      getFirestore, collection, addDoc, getDoc, getDocs,
+      doc, updateDoc, deleteDoc, query, orderBy, limit,
+      startAfter, where, increment, serverTimestamp, getCountFromServer
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+    import {
+      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+      signOut, onAuthStateChanged, updateProfile
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcBQl-CTuOgZ-ENwh330nIy6PrPMWQP9w",
+      authDomain: "souldog-0503.firebaseapp.com",
+      projectId: "souldog-0503",
+      storageBucket: "souldog-0503.firebasestorage.app",
+      messagingSenderId: "980793881825",
+      appId: "1:980793881825:web:1a2a25548b9100a241f3a0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const BOARD_TYPE = 'free';
+    const PAGE_SIZE = 10;
+
+    let currentUser = null;
+    let currentPostId = null;
+    let pageStack = [null]; // cursor stack for pagination
+    let currentPage = 1;
+    let authMode = 'login';
+
+    // ── Auth state ──
+    onAuthStateChanged(auth, user => {
+      currentUser = user;
+      updateAuthBar();
+    });
+
+    function updateAuthBar() {
+      const bar = document.getElementById('auth-bar');
+      if (currentUser) {
+        bar.innerHTML = `
+          <span class="auth-user">${escHtml(currentUser.displayName || currentUser.email)}</span>
+          <button class="btn-brutal btn-sm" id="logout-btn">로그아웃</button>`;
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+      } else {
+        bar.innerHTML = `<button class="btn-brutal btn-sm" id="open-auth-btn">로그인 / 회원가입</button>`;
+        document.getElementById('open-auth-btn').addEventListener('click', openAuthModal);
+      }
+    }
+
+    // ── View switching ──
+    window.showView = function(view) {
+      document.getElementById('view-list').hidden   = view !== 'list';
+      document.getElementById('view-detail').hidden = view !== 'detail';
+      document.getElementById('view-write').hidden  = view !== 'write';
+      if (view === 'list') loadPosts();
+    };
+
+    // ── Load posts ──
+    async function loadPosts(cursor = null) {
+      const tbody = document.getElementById('posts-tbody');
+      tbody.innerHTML = '<tr><td colspan="5" class="no-posts">로딩 중...</td></tr>';
+
+      const colRef = collection(db, 'posts');
+      let q = query(colRef,
+        where('type', '==', BOARD_TYPE),
+        orderBy('createdAt', 'desc'),
+        limit(PAGE_SIZE)
+      );
+      if (cursor) q = query(colRef,
+        where('type', '==', BOARD_TYPE),
+        orderBy('createdAt', 'desc'),
+        startAfter(cursor),
+        limit(PAGE_SIZE)
+      );
+
+      const snap = await getDocs(q);
+      const posts = [];
+      snap.forEach(d => posts.push({ id: d.id, ...d.data() }));
+
+      if (posts.length === 0 && currentPage === 1) {
+        tbody.innerHTML = '<tr><td colspan="5" class="no-posts">등록된 글이 없습니다.</td></tr>';
+        document.getElementById('pagination').innerHTML = '';
+        return;
+      }
+
+      const startNum = (currentPage - 1) * PAGE_SIZE + 1;
+      tbody.innerHTML = posts.map((p, i) => `
+        <tr class="post-row" data-id="${p.id}">
+          <td class="post-num">${startNum + i}</td>
+          <td class="post-title">${escHtml(p.title)}</td>
+          <td class="post-author">${escHtml(p.authorName || '익명')}</td>
+          <td class="post-views">${p.viewCount || 0}</td>
+          <td class="post-date">${fmtDate(p.createdAt)}</td>
+        </tr>`).join('');
+
+      tbody.querySelectorAll('.post-row').forEach(row => {
+        row.addEventListener('click', () => viewPost(row.dataset.id));
+      });
+
+      // Pagination buttons
+      const hasNext = posts.length === PAGE_SIZE;
+      const lastSnap = snap.docs[snap.docs.length - 1];
+      renderPagination(hasNext, lastSnap);
+    }
+
+    function renderPagination(hasNext, lastSnap) {
+      const pg = document.getElementById('pagination');
+      let html = '';
+      if (currentPage > 1) html += `<button class="page-btn" id="pg-prev">←</button>`;
+      html += `<button class="page-btn active">${currentPage}</button>`;
+      if (hasNext) html += `<button class="page-btn" id="pg-next">→</button>`;
+      pg.innerHTML = html;
+
+      document.getElementById('pg-prev')?.addEventListener('click', () => {
+        currentPage--;
+        pageStack.pop();
+        loadPosts(pageStack[pageStack.length - 1]);
+      });
+      document.getElementById('pg-next')?.addEventListener('click', () => {
+        pageStack.push(lastSnap);
+        currentPage++;
+        loadPosts(lastSnap);
+      });
+    }
+
+    // ── View post detail ──
+    async function viewPost(postId) {
+      const postRef = doc(db, 'posts', postId);
+      await updateDoc(postRef, { viewCount: increment(1) }).catch(() => {});
+      const snap = await getDoc(postRef);
+      if (!snap.exists()) return;
+
+      const p = { id: snap.id, ...snap.data() };
+      currentPostId = postId;
+
+      document.getElementById('detail-title').textContent   = p.title;
+      document.getElementById('detail-author').textContent  = '작성자: ' + (p.authorName || '익명');
+      document.getElementById('detail-date').textContent    = fmtDate(p.createdAt);
+      document.getElementById('detail-views').textContent   = '조회 ' + ((p.viewCount || 0) + 1);
+      document.getElementById('detail-content').textContent = p.content;
+
+      const actions = document.getElementById('detail-actions');
+      if (currentUser && currentUser.uid === p.authorId) {
+        actions.innerHTML = `<button class="btn-brutal btn-sm" id="del-btn">삭제</button>`;
+        document.getElementById('del-btn').addEventListener('click', () => deletePost(postId));
+      } else {
+        actions.innerHTML = '';
+      }
+
+      showView('detail');
+    }
+
+    async function deletePost(postId) {
+      if (!confirm('정말 삭제하시겠습니까?')) return;
+      await deleteDoc(doc(db, 'posts', postId));
+      showView('list');
+    }
+
+    // ── Write post ──
+    document.getElementById('write-btn').addEventListener('click', () => {
+      if (!currentUser) { openAuthModal(); return; }
+      document.getElementById('write-title').value   = '';
+      document.getElementById('write-content').value = '';
+      showView('write');
+    });
+
+    document.getElementById('submit-btn').addEventListener('click', async () => {
+      if (!currentUser) { openAuthModal(); return; }
+      const title   = document.getElementById('write-title').value.trim();
+      const content = document.getElementById('write-content').value.trim();
+      if (!title)   { alert('제목을 입력해주세요.'); return; }
+      if (!content) { alert('내용을 입력해주세요.'); return; }
+
+      const btn = document.getElementById('submit-btn');
+      btn.textContent = '등록 중...';
+      btn.disabled = true;
+
+      try {
+        await addDoc(collection(db, 'posts'), {
+          type: BOARD_TYPE, title, content,
+          authorId: currentUser.uid,
+          authorName: currentUser.displayName || currentUser.email,
+          createdAt: serverTimestamp(),
+          viewCount: 0
+        });
+        currentPage = 1;
+        pageStack = [null];
+        showView('list');
+      } finally {
+        btn.textContent = '등록';
+        btn.disabled = false;
+      }
+    });
+
+    // ── Auth modal ──
+    function openAuthModal() {
+      document.getElementById('auth-modal').classList.add('open');
+      document.getElementById('auth-error').textContent = '';
+      document.getElementById('auth-email').value    = '';
+      document.getElementById('auth-password').value = '';
+      document.getElementById('auth-nickname').value = '';
+    }
+
+    window.switchTab = function(mode) {
+      authMode = mode;
+      document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+      document.getElementById('tab-signup').classList.toggle('active', mode === 'signup');
+      document.getElementById('nickname-group').classList.toggle('show', mode === 'signup');
+      document.getElementById('auth-submit-btn').textContent = mode === 'login' ? '로그인' : '회원가입';
+      document.getElementById('auth-error').textContent = '';
+    };
+
+    document.getElementById('modal-close-btn').addEventListener('click', () => {
+      document.getElementById('auth-modal').classList.remove('open');
+    });
+    document.getElementById('auth-modal').addEventListener('click', e => {
+      if (e.target === document.getElementById('auth-modal'))
+        document.getElementById('auth-modal').classList.remove('open');
+    });
+
+    document.getElementById('auth-submit-btn').addEventListener('click', async () => {
+      const email    = document.getElementById('auth-email').value.trim();
+      const password = document.getElementById('auth-password').value;
+      const nickname = document.getElementById('auth-nickname').value.trim();
+      const errEl    = document.getElementById('auth-error');
+      errEl.textContent = '';
+
+      if (!email || !password) { errEl.textContent = '이메일과 비밀번호를 입력해주세요.'; return; }
+
+      try {
+        if (authMode === 'login') {
+          await signInWithEmailAndPassword(auth, email, password);
+        } else {
+          if (!nickname) { errEl.textContent = '닉네임을 입력해주세요.'; return; }
+          if (nickname.length < 2) { errEl.textContent = '닉네임은 2자 이상이어야 합니다.'; return; }
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          await updateProfile(cred.user, { displayName: nickname });
+        }
+        document.getElementById('auth-modal').classList.remove('open');
+      } catch (e) {
+        const msg = {
+          'auth/email-already-in-use': '이미 사용 중인 이메일입니다.',
+          'auth/weak-password': '비밀번호는 6자 이상이어야 합니다.',
+          'auth/invalid-email': '올바른 이메일 형식이 아닙니다.',
+          'auth/user-not-found': '등록되지 않은 이메일입니다.',
+          'auth/wrong-password': '비밀번호가 올바르지 않습니다.',
+          'auth/invalid-credential': '이메일 또는 비밀번호가 올바르지 않습니다.'
+        }[e.code] || ('오류: ' + e.message);
+        errEl.textContent = msg;
+      }
+    });
+
+    // Enter key on password field
+    document.getElementById('auth-password').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('auth-submit-btn').click();
+    });
+
+    // ── Helpers ──
+    function fmtDate(ts) {
+      if (!ts) return '-';
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`;
+    }
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // openAuthModal exposed globally
+    window.openAuthModal = openAuthModal;
+
+    // Init
+    loadPosts();
+  </script>
+
+</body>
+</html>
