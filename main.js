@@ -22,3 +22,34 @@ mainNav.querySelectorAll('a').forEach(link => {
     document.body.style.overflow = '';
   });
 });
+
+// Hero image slider with Ken Burns effect
+const slides = document.querySelectorAll('.hero-slide');
+const dots   = document.querySelectorAll('.dot');
+let current  = 0;
+let timer;
+
+function goTo(index) {
+  slides[current].classList.remove('active');
+  dots[current].classList.remove('active');
+  current = (index + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  dots[current].classList.add('active');
+}
+
+function next() { goTo(current + 1); }
+
+function startAuto() {
+  timer = setInterval(next, 4500);
+}
+
+// Dot click → jump to that slide and restart timer
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => {
+    clearInterval(timer);
+    goTo(i);
+    startAuto();
+  });
+});
+
+startAuto();
