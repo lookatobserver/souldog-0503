@@ -23,13 +23,15 @@ mainNav.querySelectorAll('a').forEach(link => {
   });
 });
 
-// Hero image slider with Ken Burns effect
+// Hero image slider with Ken Burns effect (design 1 only)
 const slides = document.querySelectorAll('.hero-slide');
 const dots   = document.querySelectorAll('.dot');
+if (!slides.length) { /* skip on design 2 */ }
 let current  = 0;
 let timer;
 
 function goTo(index) {
+  if (!slides.length) return;
   slides[current].classList.remove('active');
   dots[current].classList.remove('active');
   current = (index + slides.length) % slides.length;
@@ -43,13 +45,13 @@ function startAuto() {
   timer = setInterval(next, 4500);
 }
 
-// Dot click → jump to that slide and restart timer
-dots.forEach((dot, i) => {
-  dot.addEventListener('click', () => {
-    clearInterval(timer);
-    goTo(i);
-    startAuto();
+if (slides.length) {
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      clearInterval(timer);
+      goTo(i);
+      startAuto();
+    });
   });
-});
-
-startAuto();
+  startAuto();
+}

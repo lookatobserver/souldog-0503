@@ -196,6 +196,30 @@ ul { list-style: none; }
 .sub-menu li a:hover { background: var(--cream); color: var(--orange); }
 .has-sub:hover .sub-menu { display: block; }
 
+/* Version switcher */
+.ver-switcher {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+.ver-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: .78rem;
+  font-weight: 700;
+  border: 2px solid rgba(0,0,0,.15);
+  color: var(--text-lt);
+  transition: background .2s, border-color .2s, color .2s;
+}
+.ver-btn:hover   { border-color: var(--orange); color: var(--orange); }
+.ver-active      { background: var(--orange); border-color: var(--orange); color: var(--white) !important; }
+
 /* Hamburger */
 .hamburger {
   display: none;
