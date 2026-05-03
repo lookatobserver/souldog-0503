@@ -1,14 +1,252 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>한국반려견복지협회</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="/style.css" rel="stylesheet">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <span class="logo-paw">🐾</span>
+        <span class="logo-text">한국반려견복지협회</span>
+      </a>
+
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-list">
+          <li class="nav-item has-sub">
+            <a href="/page/sub.php?su_id=sub0101">협회소개</a>
+            <ul class="sub-menu">
+              <li><a href="/page/sub.php?su_id=sub0101">협회소개</a></li>
+              <li><a href="/page/board.php?su_id=sub0107">연혁</a></li>
+              <li><a href="/page/sub.php?su_id=sub0102">조직도</a></li>
+              <li><a href="/page/sub.php?su_id=sub0103">임원</a></li>
+              <li><a href="/page/board.php?su_id=sub0106">각 지부</a></li>
+              <li><a href="/page/sub.php?su_id=sub0104">오시는길</a></li>
+            </ul>
+          </li>
+          <li class="nav-item has-sub">
+            <a href="/page/sub.php?su_id=sub0201">한반협 활동</a>
+            <ul class="sub-menu">
+              <li><a href="/page/sub.php?su_id=sub0201">필수교육</a></li>
+              <li><a href="/page/sub.php?su_id=sub0202">재활교육</a></li>
+              <li><a href="/page/sub.php?su_id=sub0203">봉사교육</a></li>
+              <li><a href="/page/sub.php?su_id=sub0204">산책교육</a></li>
+              <li><a href="/page/sub.php?su_id=sub0205">예방교육</a></li>
+              <li><a href="/page/sub.php?su_id=sub0206">독스포츠</a></li>
+            </ul>
+          </li>
+          <li class="nav-item has-sub">
+            <a href="/page/board.php?su_id=sub0401">커뮤니티</a>
+            <ul class="sub-menu">
+              <li><a href="/page/board.php?su_id=sub0401">공지사항</a></li>
+              <li><a href="/page/board.php?su_id=sub0402">언론보도</a></li>
+              <li><a href="/page/board.php?su_id=sub0404">사진게시판</a></li>
+              <li><a href="/page/form.php?su_id=sub0405">문의하기</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="/page/sub.php?su_id=sub0301" class="nav-cta">후원하기</a>
+          </li>
+        </ul>
+      </nav>
+
+      <button class="hamburger" id="hamburger" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-inner container">
+      <div class="hero-text">
+        <h1>모든 강아지에게<br>따뜻한 가정을</h1>
+        <p>차가운 골목에서 따뜻한 무릎으로, 버려진 영혼과 영원한 사랑 사이의 다리를 놓습니다. 지금 입양 여정을 시작하세요.</p>
+        <div class="hero-btns">
+          <a href="/page/board.php?su_id=sub0401" class="btn btn-orange">친구 찾기</a>
+          <a href="/page/sub.php?su_id=sub0101" class="btn btn-ghost">더 알아보기</a>
+        </div>
+      </div>
+      <div class="hero-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=680&q=80"
+          alt="행복한 강아지"
+          class="hero-img"
+        >
+      </div>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 C480,90 960,0 1440,60 L1440,90 L0,90 Z" fill="#F5EDD8"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">❤️</div>
+          <h3>1,200+ 입양</h3>
+          <p>매년 전국의 따뜻한 가족들과 수백 마리의 유기견을 성공적으로 연결하고 있습니다.</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏥</div>
+          <h3>전문 의료 케어</h3>
+          <p>모든 강아지는 새 가정으로 가기 전 전문 수의사 검진, 예방접종, 마이크로칩 시술을 받습니다.</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">ℹ️</div>
+          <h3>평생 지원</h3>
+          <p>입양 후에도 끝나지 않는 약속. 평생 훈련 조언과 커뮤니티 자원을 제공합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DOGS ===== -->
+  <section class="dogs-section">
+    <div class="container">
+      <h2 class="section-title">새로운 소울메이트를 만나보세요</h2>
+      <p class="section-sub">당신 같은 분을 기다리는 소중한 생명들입니다.</p>
+
+      <div class="dogs-grid">
+
+        <div class="dog-card">
+          <div class="dog-photo-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=500&q=80"
+              alt="해피"
+            >
+          </div>
+          <div class="dog-body">
+            <h4>해피</h4>
+            <div class="badges">
+              <span class="badge badge-breed">골든 리트리버</span>
+              <span class="badge badge-age">2살</span>
+            </div>
+            <p>활발하고 애교 많은 해피는 산책과 낮잠을 똑같이 사랑합니다. 모든 가족 구성원과 잘 어울려요.</p>
+            <a href="/page/board.php?su_id=sub0401" class="btn btn-orange btn-full">해피 입양하기</a>
+          </div>
+        </div>
+
+        <div class="dog-card">
+          <div class="dog-photo-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?w=500&q=80"
+              alt="초코"
+            >
+          </div>
+          <div class="dog-body">
+            <h4>초코</h4>
+            <div class="badges">
+              <span class="badge badge-breed">프렌치 불독</span>
+              <span class="badge badge-age">3살</span>
+            </div>
+            <p>온순하고 사랑스러운 초코는 아파트 생활에 딱 맞고, 조용한 저녁 산책을 좋아합니다.</p>
+            <a href="/page/board.php?su_id=sub0401" class="btn btn-orange btn-full">초코 입양하기</a>
+          </div>
+        </div>
+
+        <div class="dog-card">
+          <div class="dog-photo-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1598133894008-61f7fdb8cc3a?w=500&q=80"
+              alt="루시"
+            >
+          </div>
+          <div class="dog-body">
+            <h4>루시</h4>
+            <div class="badges">
+              <span class="badge badge-breed">비글</span>
+              <span class="badge badge-age">1살</span>
+            </div>
+            <p>호기심 왕성하고 영리한 루시는 장난기도 많아요. 활동적인 가정에서 함께라면 더없이 행복할 거예요.</p>
+            <a href="/page/board.php?su_id=sub0401" class="btn btn-orange btn-full">루시 입양하기</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DONATION CTA ===== -->
+  <section class="donation-cta">
+    <div class="container">
+      <div class="cta-box">
+        <div class="cta-text">
+          <h2>함께 지켜주세요</h2>
+          <p>여러분의 소중한 후원금은 갈 곳 없는 강아지들에게 먹이, 쉼터, 의료 지원을 제공하는 데 쓰입니다. 따뜻한 마음으로 함께해 주세요.</p>
+        </div>
+        <a href="/page/sub.php?su_id=sub0301" class="btn btn-orange btn-lg">지금 후원하기</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <div class="logo logo-light">
+            <span class="logo-paw">🐾</span>
+            <span class="logo-text">한국반려견복지협회</span>
+          </div>
+          <p>2012년부터 유기견 구조·재활·입양을 통해 반려견 복지를 실현하는 사단법인입니다.</p>
+          <div class="social-row">
+            <a href="#" class="social-btn" aria-label="인스타그램">IG</a>
+            <a href="#" class="social-btn" aria-label="페이스북">FB</a>
+            <a href="#" class="social-btn" aria-label="유튜브">YT</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>빠른 링크</h5>
+          <ul>
+            <li><a href="/page/board.php?su_id=sub0401">공지사항</a></li>
+            <li><a href="/page/board.php?su_id=sub0402">언론보도</a></li>
+            <li><a href="/page/form.php?su_id=sub0405">문의하기</a></li>
+            <li><a href="/page/sub.php?su_id=sub0301">후원하기</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>활동 안내</h5>
+          <ul>
+            <li><a href="/page/sub.php?su_id=sub0201">필수교육</a></li>
+            <li><a href="/page/sub.php?su_id=sub0202">재활교육</a></li>
+            <li><a href="/page/sub.php?su_id=sub0203">봉사교육</a></li>
+            <li><a href="/page/sub.php?su_id=sub0206">독스포츠</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>연락처</h5>
+          <ul>
+            <li><a href="mailto:info@koreapetdog.org">info@koreapetdog.org</a></li>
+            <li>02-123-4567</li>
+            <li>서울특별시 강남구<br>반려견로 123</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2024 사단법인 한국반려견복지협회. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="/main.js"></script>
 </body>
 </html>
