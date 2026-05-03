@@ -77,18 +77,19 @@ ul  { list-style: none; }
   cursor: crosshair;
 }
 .logo2-img {
-  width: 46px;
-  height: 46px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
   flex-shrink: 0;
 }
-.logo2-texts {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
+.logo2-title {
+  font-family: var(--font-body);
+  font-size: 1.76rem;
+  font-weight: 900;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  line-height: 1;
 }
-.logo2-sub  { font-family: var(--font-mono); font-size: .62rem; letter-spacing: .08em; color: #555; }
-.logo2-main { font-family: var(--font-body); font-size: .88rem; font-weight: 900; letter-spacing: -.01em; }
 
 /* Nav */
 .nav-list2 {
