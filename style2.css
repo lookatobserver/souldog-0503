@@ -77,8 +77,8 @@ ul  { list-style: none; }
   cursor: crosshair;
 }
 .logo2-img {
-  width: 43px;
-  height: 43px;
+  width: 54px;
+  height: 54px;
   object-fit: contain;
   flex-shrink: 0;
 }
