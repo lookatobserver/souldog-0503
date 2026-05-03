@@ -176,6 +176,7 @@ ul { list-style: none; }
   top: calc(100% + 8px);
   left: 0;
   min-width: 160px;
+  width: max-content;
   background: var(--white);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -189,6 +190,7 @@ ul { list-style: none; }
   font-size: .88rem;
   font-weight: 400;
   color: var(--text);
+  white-space: nowrap;
   transition: background .15s, color .15s;
 }
 .sub-menu li a:hover { background: var(--cream); color: var(--orange); }
