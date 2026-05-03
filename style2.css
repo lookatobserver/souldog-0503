@@ -29,7 +29,7 @@ ul  { list-style: none; }
 
 /* ===== TICKER ===== */
 .ticker-wrap {
-  background: var(--yellow);
+  background: #f95c1a;
   border-bottom: var(--border);
   overflow: hidden;
   white-space: nowrap;
@@ -46,6 +46,7 @@ ul  { list-style: none; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .06em;
+  color: #fff;
 }
 @keyframes ticker {
   from { transform: translateX(0); }
