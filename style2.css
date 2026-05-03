@@ -77,14 +77,14 @@ ul  { list-style: none; }
   cursor: crosshair;
 }
 .logo2-img {
-  width: 64px;
-  height: 64px;
+  width: 43px;
+  height: 43px;
   object-fit: contain;
   flex-shrink: 0;
 }
 .logo2-title {
   font-family: var(--font-body);
-  font-size: 1.76rem;
+  font-size: 0.88rem;
   font-weight: 900;
   letter-spacing: -.01em;
   white-space: nowrap;
