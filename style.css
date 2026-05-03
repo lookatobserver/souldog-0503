@@ -98,13 +98,44 @@ ul { list-style: none; }
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  font-size: .98rem;
+  gap: 10px;
   color: var(--dark);
   white-space: nowrap;
+  text-decoration: none;
 }
-.logo-paw { font-size: 1.4rem; }
+
+.logo-img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.15));
+  transition: transform .25s;
+}
+.logo:hover .logo-img { transform: rotate(-5deg) scale(1.05); }
+
+.logo-texts {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  gap: 1px;
+}
+.logo-sub {
+  font-size: .68rem;
+  font-weight: 500;
+  color: var(--text-lt);
+  letter-spacing: .08em;
+}
+.logo-main {
+  font-size: .98rem;
+  font-weight: 900;
+  color: var(--dark);
+  letter-spacing: -.01em;
+}
+
+/* Footer logo overrides */
+.logo-light .logo-sub  { color: rgba(255,255,255,.5); }
+.logo-light .logo-main { color: var(--white); }
 
 /* Nav */
 .main-nav { display: flex; }
